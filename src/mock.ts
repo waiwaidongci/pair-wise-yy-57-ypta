@@ -1,4 +1,4 @@
-import type { ExecutionRecord, StationDevice, TestCase } from './types'
+import type { EvidenceRecord, ExecutionRecord, StationDevice, StepCheckout, TestCase } from './types'
 
 export const devices: StationDevice[] = [
   { id:'P-01',name:'1# 道岔',kind:'道岔',x:18,y:58,routeIds:['R-01','R-02'] },
@@ -30,4 +30,20 @@ export const seedExecutions: ExecutionRecord[] = [
   { id:'EX-260929-04',caseId:'TC-103',operator:'陆晨',startedAt:'16:10',finishedAt:'16:38',snapshot:'v26.09 / CS-LEU-08',result:'失败',evidence:['VID-014','LG-119'] },
   { id:'EX-260929-03',caseId:'TC-101',operator:'陆晨',startedAt:'15:20',finishedAt:'15:44',snapshot:'v26.09 / CS-LEU-08',result:'通过',evidence:['XS-026','LG-108'] },
   { id:'EX-260929-02',caseId:'TC-102',operator:'方瑜',startedAt:'14:52',snapshot:'v26.09 / CS-LEU-08',result:'执行中',evidence:['XS-031'] },
+]
+
+/** 步骤签出种子：方瑜持有 TS-4 有效签出；陆晨一份交班草稿、一份过期只读签出 */
+export const seedCheckouts: StepCheckout[] = [
+  { id:'CO-261002-01',caseId:'TC-102',stepId:'TS-4',executor:'方瑜',version:'v26.09',checkedOutAt:'14:52',status:'有效',source:'正常签出' },
+  { id:'CO-260930-02',caseId:'TC-104',stepId:'TS-6',executor:'陆晨',version:'v26.09',checkedOutAt:'09:12',status:'已交班',handedOverBy:'陆晨',handedOverAt:'09:12',source:'正常签出',draft:{ actual:'等待 T-03 绝缘节调整完成，暂不具备试验条件',note:'接班人确认绝缘节状态后重开',savedAt:'09:12' } },
+  { id:'CO-260928-01',caseId:'TC-101',stepId:'TS-1',executor:'陆晨',version:'v26.08',checkedOutAt:'09-28 10:05',status:'已过期',source:'历史补齐' },
+]
+
+/** 执行证据种子：已封存；版本变化后只置失效、不删除 */
+export const seedEvidences: EvidenceRecord[] = [
+  { id:'EV-01',caseId:'TC-101',stepId:'TS-1',kind:'截图',ref:'XS-026',sealed:true,valid:true,checkoutId:'CO-260928-01',sealedAt:'09-28 10:31' },
+  { id:'EV-02',caseId:'TC-101',stepId:'TS-2',kind:'日志',ref:'LG-108',sealed:true,valid:true,sealedAt:'09-29 15:44' },
+  { id:'EV-03',caseId:'TC-102',stepId:'TS-3',kind:'截图',ref:'XS-031',sealed:true,valid:true,checkoutId:'CO-261002-01',sealedAt:'09-29 14:52' },
+  { id:'EV-04',caseId:'TC-103',stepId:'TS-5',kind:'录屏',ref:'VID-014',sealed:true,valid:true,sealedAt:'09-29 16:38' },
+  { id:'EV-05',caseId:'TC-103',stepId:'TS-5',kind:'日志',ref:'LG-119',sealed:true,valid:true,sealedAt:'09-29 16:38' },
 ]
